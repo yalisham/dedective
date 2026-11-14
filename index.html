@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="az" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STAR OR PLANET? — NASA Elmi Təsnifat Metodu</title>
+  <meta name="description" content="Təsnif edilməmiş göy cisimlərini müəyyənləşdirmək üçün altı mərhələli, sübuta əsaslanan NASA elmi təsnifat metodu.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- KaTeX CSS & JS for Scientific Math Rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" 
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#060913] text-slate-100 min-h-screen relative antialiased selection:bg-sky-500/30 selection:text-sky-200">
+
+  <!-- Background Star Canvas -->
+  <canvas id="star-canvas"></canvas>
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#060913]/85 border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 via-sky-400 to-purple-500 p-0.5 shadow-lg shadow-sky-500/20 group-hover:scale-105 transition-transform">
+          <div class="w-full h-full bg-[#060913] rounded-[10px] flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-5 h-5 text-sky-400"></i>
+          </div>
+        </div>
+        <div>
+          <span class="font-extrabold tracking-tight text-lg text-white group-hover:text-sky-400 transition-colors">STAR OR PLANET?</span>
+          <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-[10px] font-semibold bg-sky-950/80 text-sky-300 border border-sky-800/60 rounded-full">NASA Metodu</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300">
+        <a href="#summary" class="hover:text-sky-400 transition-colors">Xülasə</a>
+        <a href="#problem" class="hover:text-sky-400 transition-colors">Problem</a>
+        <a href="#methods" class="hover:text-sky-400 transition-colors">Elmi Metod</a>
+        <a href="#classifier" class="hover:text-sky-400 transition-colors">Təsnifat Aləti</a>
+        <a href="#pipeline" class="hover:text-sky-400 transition-colors">6 Mərhələ</a>
+        <a href="#cases" class="hover:text-sky-400 transition-colors">NASA Faktlar</a>
+        <a href="#faq" class="hover:text-sky-400 transition-colors">S&amp;C (FAQ)</a>
+        <a href="#references" class="hover:text-sky-400 transition-colors">İstinadlar</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="#classifier" class="px-3.5 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs shadow-md shadow-sky-500/25 transition-all flex items-center gap-1.5">
+          <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+          <span>Simulyator</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-24">
+
+    <!-- HERO SECTION -->
+    <section class="text-center pt-8 pb-12 space-y-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-700 text-xs text-slate-300 shadow-inner">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Məlumat bazası: Yalnız rəsmi NASA mənbələri [1]–[7] &bull; Gaia (ESA) yalnız kontekstdir</span>
+      </div>
+
+      <div class="space-y-4 max-w-4xl mx-auto">
+        <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-sky-300 to-purple-300 leading-tight">
+          STAR OR PLANET?
+        </h1>
+        <p class="text-lg sm:text-2xl font-light text-slate-300">
+          Təsnif edilməmiş göy cisimlərini müəyyənləşdirmək üçün altı mərhələli elmi metod
+        </p>
+      </div>
+
+      <!-- 3-Pillar Visual Banner from Page 1 -->
+      <div class="max-w-3xl mx-auto p-6 rounded-3xl bg-slate-900/60 border border-slate-800 relative overflow-hidden backdrop-blur-xl shadow-2xl">
+        <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-sky-500/10 pointer-events-none"></div>
+        <div class="relative grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
+          
+          <!-- ULDUZ -->
+          <div class="p-5 rounded-2xl bg-amber-950/30 border border-amber-500/40 glow-star">
+            <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-amber-300 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/40 animate-pulse-glow">
+              <i data-lucide="sun" class="w-8 h-8 text-slate-950"></i>
+            </div>
+            <div class="mt-3 font-extrabold text-amber-300 text-lg tracking-wider">ULDUZ</div>
+            <div class="text-xs text-amber-200/70 mt-1">&ge; 75 M<sub>J</sub> &bull; Nüvə Sintezi</div>
+          </div>
+
+          <!-- QUESTION / UNCLASSIFIED -->
+          <div class="p-5 rounded-2xl bg-purple-950/40 border border-purple-500/40 glow-unclassified relative">
+            <div class="text-[11px] font-semibold text-purple-300/80 uppercase tracking-widest mb-1 italic">Sübut harada bitir?</div>
+            <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-purple-400 to-indigo-600 flex items-center justify-center shadow-lg shadow-purple-500/40 text-2xl font-black text-white">
+              ?
+            </div>
+            <div class="mt-3 font-extrabold text-purple-300 text-sm tracking-wide">TƏSNİF EDİLMƏYİB</div>
+            <div class="text-[11px] text-purple-200/70 mt-1">15–75 M<sub>J</sub> / Çatışmayan Sübut</div>
+          </div>
+
+          <!-- PLANET -->
+          <div class="p-5 rounded-2xl bg-sky-950/30 border border-sky-500/40 glow-planet">
+            <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-sky-300 to-blue-600 flex items-center justify-center shadow-lg shadow-sky-500/40 animate-pulse-glow">
+              <i data-lucide="globe" class="w-8 h-8 text-slate-950"></i>
+            </div>
+            <div class="mt-3 font-extrabold text-sky-300 text-lg tracking-wider">PLANET</div>
+            <div class="text-xs text-sky-200/70 mt-1">&le; 15 M<sub>J</sub> &bull; Sintez Yoxdur</div>
+          </div>
+
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-slate-800 text-xs text-slate-400">
+          Qızıl Qayda: <span class="text-slate-200 font-semibold">Çatışmayan məlumat heç vaxt təxminlə doldurulmur.</span> Sübut natamam olduqda sistem dürüst şəkildə <span class="text-purple-300 font-bold">"Hələlik deyə bilmərik"</span> cavabını verir.
+        </div>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto">
+        <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800">
+          <div class="text-2xl font-black text-sky-400 font-mono">6 Mərhələ</div>
+          <div class="text-xs text-slate-400 mt-1">Sübuta əsaslanan ardıcıllıq</div>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800">
+          <div class="text-2xl font-black text-amber-400 font-mono">5 Qanun</div>
+          <div class="text-xs text-slate-400 mt-1">Fiziki riyazi münasibət</div>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800">
+          <div class="text-2xl font-black text-purple-400 font-mono">3 Nəticə</div>
+          <div class="text-xs text-slate-400 mt-1">Ulduz, Planet, Təsnif Edilməyib</div>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800">
+          <div class="text-2xl font-black text-emerald-400 font-mono">100% NASA</div>
+          <div class="text-xs text-slate-400 mt-1">Rəsmi məlumat siyasəti</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: XÜLASƏ VƏ PROBLEM (PAGE 1) -->
+    <section id="summary" class="space-y-8 scroll-mt-24">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm">01</div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Xülasə və Problem</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Abstract Box -->
+        <div class="lg:col-span-6 p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
+          <h3 class="text-lg font-bold text-sky-400 flex items-center gap-2">
+            <i data-lucide="book-open" class="w-5 h-5"></i> Xülasə
+          </h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Bəzi göy cisimlərini yalnız bir müşahidə sorğusuna əsasən ulduz, yoxsa planet adlandırmaq mümkün olmur. Mövqe, hərəkət və parlaqlıq yaxşı ölçülə bilər, lakin sinfi müəyyən edən kəmiyyətlər — <strong>həqiqi kütlə, radius, spektr və enerji mənbəyi</strong> — məlum qalmır.
+          </p>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Bu layihə NASA məlumatları üzərində qurulmuş altı mərhələli, sübuta əsaslanan təsnifat metodu təklif edir. Nəticə üç haldan biridir: <strong class="text-amber-300">ULDUZ</strong>, <strong class="text-sky-300">PLANET</strong> və ya <strong class="text-purple-300">TƏSNİF EDİLMƏYİB</strong>. Çatışmayan məlumat heç vaxt təxminlə doldurulmur. Beş fiziki münasibət izah olunur və NASA-nın Günəş və Yupiter üçün dərc etdiyi dəyərlər üzərində nümunə hesablamalarla yoxlanılır.
+          </p>
+        </div>
+
+        <!-- Problem Box -->
+        <div class="lg:col-span-6 p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
+          <h3 class="text-lg font-bold text-rose-400 flex items-center gap-2">
+            <i data-lucide="alert-triangle" class="w-5 h-5"></i> 1. Problem (Gaia Konteksti)
+          </h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Gaia Avropa Kosmik Agentliyinin (ESA) missiyasıdır, NASA-nın deyil; burada yalnız problemin konteksti kimi istifadə olunur. Bu tipli astrometrik və fotometrik sorğular mövqe, paralaks, məxsusi hərəkət və parlaqlıq verir.
+          </p>
+          <div class="p-3.5 rounded-xl bg-rose-950/30 border border-rose-500/30 text-xs text-rose-200 leading-relaxed">
+            <strong>Mühüm fərq:</strong> Bu müşahidələr təkbaşına cismin kütləsini, radiusunu və ya onun daxilində hidrogen sintezinin getdiyini sübut etmir — ulduzu planetdən məhz bu daxili xassələr ayırır.
+          </div>
+        </div>
+      </div>
+
+      <!-- Problem Table from Page 1 -->
+      <div id="problem" class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/50">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead class="bg-slate-900/90 text-slate-400 font-semibold border-b border-slate-800">
+            <tr>
+              <th class="p-3.5">Tipik sorğu müşahidəsi</th>
+              <th class="p-3.5">Nəyi göstərir</th>
+              <th class="p-3.5 text-rose-300">Təsnifat üçün nə çatışmır</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 text-slate-300">
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3.5 font-medium text-white">Mövqe, paralaks</td>
+              <td class="p-3.5">Məsafə, yerləşmə</td>
+              <td class="p-3.5 text-rose-300/90 font-mono">Kütlə; cismin hostla bağlı olub-olmaması</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3.5 font-medium text-white">Məxsusi hərəkət</td>
+              <td class="p-3.5">Səmada hərəkət</td>
+              <td class="p-3.5 text-rose-300/90 font-mono">Orbit (a, P) — əlavə müşahidə lazımdır</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3.5 font-medium text-white">Parlaqlıq (işıq axını)</td>
+              <td class="p-3.5">Məsafə məlumdursa, işıqlıq</td>
+              <td class="p-3.5 text-rose-300/90 font-mono">Enerji mənbəyi: sintez var, ya yox</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3.5 font-medium text-white">Geniş zolaqlı rəng</td>
+              <td class="p-3.5">Təxmini temperatur</td>
+              <td class="p-3.5 text-rose-300/90 font-mono">Spektr tipi, tərkib, sintez sübutu</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="p-3 bg-slate-950/60 text-[11px] text-slate-400 border-t border-slate-800 italic">
+          * Yalnız kontekst (ESA Gaia missiyası); bu təsnifatdakı heç bir elmi dəyər ondan götürülməyib.
+        </div>
+      </div>
+
+      <!-- Məqsəd və Məlumat Siyasəti (Page 1) -->
+      <div class="p-6 rounded-2xl bg-gradient-to-br from-slate-900/80 to-slate-900/40 border border-slate-800 space-y-4">
+        <h3 class="text-lg font-bold text-sky-400 flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-5 h-5"></i> 2. Məqsəd və Məlumat Siyasəti
+        </h3>
+        <p class="text-sm text-slate-300 leading-relaxed">
+          <strong>Məqsəd:</strong> müstəqil sübut xətlərini — kütlə, ölçü, sıxlıq, spektr və enerji mənbəyi — şəffaf qərar qaydasında birləşdirmək; bu qayda dürüst şəkildə <em>“hələlik deyə bilmərik”</em> cavabını verə bilməlidir.
+        </p>
+        <p class="text-sm text-slate-300 leading-relaxed">
+          <strong>Məlumat siyasəti:</strong> hər faktiki rəqəm NASA mənbəsindən gəlir, ölçü vahidi və istinadla verilir; sabitlər və illüstrativ girişlər ayrıca qeyd olunur; heç bir təxmin müşahidə kimi təqdim edilmir.
+        </p>
+
+        <!-- NASA Sources Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-xs">
+            <div class="font-bold text-sky-400">NASA Exoplanet Archive [4]</div>
+            <div class="text-slate-400 mt-1">Təsdiqlənmiş parametrlər; planetin daxil edilmə meyarları (kütlə həddi 30 M<sub>J</sub>)</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-xs">
+            <div class="font-bold text-sky-400">NASA TESS (HEASARC) [6]</div>
+            <div class="text-slate-400 mt-1">İşıq əyriləri; tranzit dərinliyi (&delta;) və period</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-xs">
+            <div class="font-bold text-sky-400">NASA ADS [7]</div>
+            <div class="text-slate-400 mt-1">Ölçülmüş parametrlər üçün ədəbiyyat axtarışı (1-ci mərhələ)</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-xs">
+            <div class="font-bold text-sky-400">NASA/JPL Dynamics [3]</div>
+            <div class="text-slate-400 mt-1">Qravitasiya sabiti G (CODATA 2018) və planet parametrləri</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-xs">
+            <div class="font-bold text-sky-400">NASA NSSDC [1], [2]</div>
+            <div class="text-slate-400 mt-1">Günəş və Yupiter üçün rəsmi istinad dəyərləri</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-xs">
+            <div class="font-bold text-sky-400">NASA StarChild [5]</div>
+            <div class="text-slate-400 mt-1">Qəhvəyi cırtdan kütlə aralığı (təxminən 15–75 Yupiter kütləsi)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: ELMİ METOD VƏ İNTERAKTİV HESABLAYICILAR (PAGE 2, 3, 4) -->
+    <section id="methods" class="space-y-8 scroll-mt-24">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm">02</div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Elmi Metod və Fiziki Münasibətlər</h2>
+          <p class="text-xs sm:text-sm text-slate-400">Kepler, Sıxlıq, TESS Tranziti, Doppler və Spektral Analiz</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- A. KEPLER III LAW -->
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-bold text-amber-300">A. Kepler Üçüncü Qanunu ilə Kütlə</h3>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 border border-amber-600/40 text-amber-300 font-mono">Düstur 1</span>
+            </div>
+
+            <!-- LaTeX Formula -->
+            <div class="my-3 p-4 bg-slate-950/80 rounded-xl border border-slate-800 text-center font-mono text-xl text-amber-400">
+              $$M = \frac{4\pi^2 a^3}{G P^2}$$
+            </div>
+
+            <p class="text-xs text-slate-400 leading-relaxed">
+              <strong>M</strong> mərkəzi cismin kütləsi (kq) &bull; <strong>a</strong> böyük yarımox (m) &bull; <strong>G</strong> qravitasiya sabiti (6.67430&times;10⁻¹¹ m³ kq⁻¹ san⁻²) &bull; <strong>P</strong> orbital period (san).
+            </p>
+
+            <div class="mt-3 p-3 rounded-lg bg-slate-950/50 border border-amber-500/20 text-xs text-slate-300">
+              <strong class="text-amber-400">Qarışdırmayın:</strong> Kepler qanunu ətrafında fırlanılan cismin kütləsini verir. Bu, müşahidə olunan cismin öz kütləsi deyil (məgər o, host cismin özü olmasın). Yoldaşın kütləsi üçün hostun əks hərəkəti (Doppler) lazımdır.
+            </div>
+          </div>
+
+          <!-- Interactive Kepler Mini-Calc -->
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-300">
+              <span>Kepler Kütlə Hesablayıcısı</span>
+              <button id="kepler-preset-jupiter" class="text-sky-400 hover:text-sky-300 underline text-[11px]">Yupiter-Günəş Nümunəsi</button>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <label class="text-[11px] text-slate-400">Yarımox a (km):</label>
+                <input id="kepler-a" type="number" value="778479000" class="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-white font-mono text-xs">
+              </div>
+              <div>
+                <label class="text-[11px] text-slate-400">Period P (gün):</label>
+                <input id="kepler-p" type="number" value="4332.589" class="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-white font-mono text-xs">
+              </div>
+            </div>
+            <div id="kepler-result" class="text-center pt-1"></div>
+          </div>
+        </div>
+
+        <!-- B. DENSITY AND THE PARADOX -->
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-bold text-sky-300">B. Sıxlıq və Günəş-Yupiter Paradoksu</h3>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-sky-950 border border-sky-600/40 text-sky-300 font-mono">Düstur 2</span>
+            </div>
+
+            <!-- LaTeX Formula -->
+            <div class="my-3 p-4 bg-slate-950/80 rounded-xl border border-slate-800 text-center font-mono text-xl text-sky-400">
+              $$\rho = \frac{3M}{4\pi R^3}$$
+            </div>
+
+            <p class="text-xs text-slate-400 leading-relaxed">
+              <strong>&rho;</strong> orta sıxlıq (kq/m³) &bull; <strong>M</strong> kütlə (kq) &bull; <strong>R</strong> radius (m). Maddənin nə qədər sıx yığıldığını göstərir və tərkibləri (qazlı, qayalı, yığcam) ayırmağa kömək edir.
+            </p>
+
+            <!-- Density Comparison Bar Chart from Page 2 -->
+            <div class="mt-4 p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-3">
+              <div class="text-xs font-semibold text-slate-300 flex justify-between">
+                <span>Nisbət: Günəş &divide; Yupiter</span>
+                <span class="text-amber-400 font-bold">Kütlə ~1050x, Sıxlıq cəmi ~6% fərqlənir!</span>
+              </div>
+              
+              <div class="space-y-2 text-xs font-mono">
+                <div>
+                  <div class="flex justify-between text-[11px] text-slate-400 mb-0.5">
+                    <span>Kütlə (M)</span>
+                    <span class="text-amber-400 font-bold">&times; 1,047.6</span>
+                  </div>
+                  <div class="w-full bg-slate-800 rounded-full h-3">
+                    <div class="bg-gradient-to-r from-amber-500 to-amber-300 h-3 rounded-full" style="width: 100%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-[11px] text-slate-400 mb-0.5">
+                    <span>Radius (R)</span>
+                    <span class="text-sky-400 font-bold">&times; 9.95</span>
+                  </div>
+                  <div class="w-full bg-slate-800 rounded-full h-3">
+                    <div class="bg-gradient-to-r from-sky-500 to-sky-300 h-3 rounded-full" style="width: 35%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-[11px] text-slate-400 mb-0.5">
+                    <span>Orta Sıxlıq (&rho;)</span>
+                    <span class="text-emerald-400 font-bold">&times; 1.06 (Günəş 1408 kq/m³, Yupiter 1326 kq/m³)</span>
+                  </div>
+                  <div class="w-full bg-slate-800 rounded-full h-3">
+                    <div class="bg-gradient-to-r from-emerald-500 to-emerald-300 h-3 rounded-full" style="width: 12%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3 p-3 rounded-lg bg-rose-950/30 border border-rose-500/20 text-xs text-rose-200">
+              <strong>Sıxlıq təkbaşına qəti sübut deyil:</strong> Ulduz və planetin orta sıxlığı demək olar ki, eyni ola bilər; sıxlıq yalnız uyğunluq yoxlamasıdır (4-cü mərhələ). Daxili quruluşu göstərmir.
+            </div>
+          </div>
+
+          <!-- Density Interactive Input -->
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <div class="text-xs font-semibold text-slate-300">Canlı Sıxlıq Hesablayıcı</div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <label class="text-[11px] text-slate-400">Kütlə M (kq):</label>
+                <input id="density-m" type="number" value="1.89813e27" class="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-white font-mono text-xs">
+              </div>
+              <div>
+                <label class="text-[11px] text-slate-400">Radius R (km):</label>
+                <input id="density-r" type="number" value="69911" class="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-white font-mono text-xs">
+              </div>
+            </div>
+            <div id="density-result" class="text-center pt-1"></div>
+          </div>
+        </div>
+
+        <!-- C. TRANZIT METODU (TESS) & LIGHT CURVE -->
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-bold text-sky-300">C. Tranzit Metodu (TESS)</h3>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-sky-950 border border-sky-600/40 text-sky-300 font-mono">Düstur 3</span>
+            </div>
+
+            <!-- LaTeX Formula -->
+            <div class="my-3 p-4 bg-slate-950/80 rounded-xl border border-slate-800 text-center font-mono text-xl text-sky-400">
+              $$\delta = \left(\frac{R_p}{R_s}\right)^2$$
+            </div>
+
+            <p class="text-xs text-slate-400 leading-relaxed">
+              <strong>&delta;</strong> işıq axınının nisbi azalması (tranzit dərinliyi) &bull; <strong>R<sub>p</sub></strong> planetin radiusu &bull; <strong>R<sub>s</sub></strong> ulduzun radiusu.
+            </p>
+
+            <div class="mt-2 text-xs text-slate-300 leading-relaxed">
+              <strong>Fiziki mənası:</strong> Cisim ulduzun qarşısından keçəndə diskin bir hissəsini örtür və ulduz zəifləyir. TESS ulduzun işıq axınını zamana görə qeyd edir. Yupiter-Günəş üçün: &delta; = (69 911 km &divide; 695 700 km)² &approx; <strong>1.01%</strong>.
+            </div>
+          </div>
+
+          <!-- Interactive Light Curve Simulator -->
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-semibold text-slate-300">Tranzit İşıq Əyrisi Simulyatoru (TESS)</span>
+              <span id="transit-val" class="text-sky-400 text-xs font-mono"></span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <div>
+                <label class="text-[11px] text-slate-400">Planet Radius R<sub>p</sub> (km):</label>
+                <input id="transit-rp" type="range" min="10000" max="150000" step="1000" value="69911" class="w-full">
+              </div>
+              <div>
+                <label class="text-[11px] text-slate-400">Ulduz Radius R<sub>s</sub> (km):</label>
+                <input id="transit-rs" type="range" min="300000" max="1400000" step="10000" value="695700" class="w-full">
+              </div>
+            </div>
+
+            <canvas id="transit-canvas" width="450" height="150" class="w-full h-36 bg-slate-900 rounded-lg border border-slate-800"></canvas>
+            <div class="text-[11px] text-slate-500 text-center">Nisbi işıq axını və orbital faza</div>
+          </div>
+        </div>
+
+        <!-- D. DOPPLER METODU & RADIAL VELOCITY -->
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-bold text-amber-300">D. Doppler (Radial Sürət) Metodu</h3>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 border border-amber-600/40 text-amber-300 font-mono">Düstur 4</span>
+            </div>
+
+            <!-- LaTeX Formula -->
+            <div class="my-3 p-4 bg-slate-950/80 rounded-xl border border-slate-800 text-center font-mono text-xl text-amber-400">
+              $$\frac{\Delta\lambda}{\lambda_0} = \frac{v}{c}$$
+            </div>
+
+            <p class="text-xs text-slate-400 leading-relaxed">
+              <strong>&Delta;&lambda;</strong> dalğa uzunluğu sürüşməsi &bull; <strong>&lambda;₀</strong> sakit dalğa uzunluğu &bull; <strong>v</strong> görmə xətti üzrə sürət &bull; <strong>c</strong> işıq sürəti (299 792 458 m/san).
+            </p>
+
+            <div class="mt-2 text-xs text-slate-300 leading-relaxed">
+              <strong>Yupiterin Günəşə təsiri:</strong> Yupiter Günəşi ortaq mərkəz ətrafında yelləyir: Günəşin əks sürət semi-amplitudası <strong class="text-amber-400">K = 12.46 m/san</strong>, &Delta;&lambda;/&lambda;₀ = 4.16&times;10⁻⁸. &lambda;₀ = 500 nm üçün &Delta;&lambda; cəmi <strong>2.1&times;10⁻⁵ nm</strong>-dir!
+            </div>
+          </div>
+
+          <!-- Interactive Doppler Simulator -->
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-semibold text-slate-300">Radial Sürət Əyrisi (Host Yellənməsi)</span>
+              <span id="doppler-val" class="text-amber-400 text-xs font-mono"></span>
+            </div>
+
+            <div>
+              <label class="text-[11px] text-slate-400">Planet Kütləsi M<sub>p</sub> (Yupiter kütləsi ilə):</label>
+              <input id="doppler-mp" type="range" min="0.1" max="15" step="0.1" value="1.0" class="w-full">
+            </div>
+
+            <canvas id="doppler-canvas" width="450" height="150" class="w-full h-36 bg-slate-900 rounded-lg border border-slate-800"></canvas>
+            <div class="text-[11px] text-slate-500 text-center">Günəşin radial sürət əyrisi (model) &bull; Orbital faza üzrə dövr</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- E. SPEKTR VƏ NÜVƏ SİNTEZİ (PAGE 4) -->
+      <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold text-emerald-400">E. Spektr və Nüvə Sintezi (Stefan-Bolsman Qanunu)</h3>
+          <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 border border-emerald-600/40 text-emerald-300 font-mono">Düstur 5</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-5 p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
+            <div class="font-mono text-xl text-emerald-400">
+              $$L = 4\pi R^2 \sigma T_{\text{eff}}^4$$
+            </div>
+            <div class="text-xs text-slate-400 mt-2">
+              &sigma; = 5.670&times;10⁻⁸ Vt m⁻² K⁻⁴ (Stefan-Bolsman sabiti)<br>
+              Günəş: T<sub>eff</sub> = 5772 K &rarr; L = 3.828&times;10²⁶ Vt<br>
+              Kütlə-enerji çevrilməsi: L/c² = <strong>4.26&times;10⁹ kq/san</strong>
+            </div>
+          </div>
+
+          <div class="md:col-span-7 overflow-x-auto">
+            <table class="w-full text-left text-xs border border-slate-800 rounded-xl overflow-hidden">
+              <thead class="bg-slate-900 text-slate-400">
+                <tr>
+                  <th class="p-2.5">Sübut xətti</th>
+                  <th class="p-2.5 text-amber-300">Ulduza xas</th>
+                  <th class="p-2.5 text-sky-300">Planetə xas</th>
+                  <th class="p-2.5 text-purple-300">Sərhəd / Qeyri-müəyyən</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 text-slate-300">
+                <tr>
+                  <td class="p-2.5 font-medium">Kütlə</td>
+                  <td class="p-2.5 text-amber-300">&ge; 75 M<sub>J</sub></td>
+                  <td class="p-2.5 text-sky-300">&le; 15 M<sub>J</sub></td>
+                  <td class="p-2.5 text-purple-300">15–75 M<sub>J</sub> (Qəhvəyi cırtdan)</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-medium">Enerji mənbəyi</td>
+                  <td class="p-2.5">Davamlı H sintezi; L kütləyə uyğun</td>
+                  <td class="p-2.5">Sintez yoxdur [5]</td>
+                  <td class="p-2.5">Davamlı H sintezi yoxdur, amma planetdən yuxarı</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-medium">Spektr, T<sub>eff</sub>, L</td>
+                  <td class="p-2.5">Sintez edən ulduza uyğun</td>
+                  <td class="p-2.5">Əks olunmuş işıq rejimi</td>
+                  <td class="p-2.5">Soyuq, zəif, qismən məlumat</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-medium">Kontekst</td>
+                  <td class="p-2.5">Müstəqil cisim və ya bağlı ulduz</td>
+                  <td class="p-2.5">Hostla bağlı; sərbəst üzən deyil</td>
+                  <td class="p-2.5">Yaranma məlum deyil</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: CANLI İNTERAKTİV TƏSNİFAT SİMULYATORU (THE CORE HIGHLIGHT) -->
+    <section id="classifier" class="space-y-8 scroll-mt-24">
+      <div class="flex items-center justify-between flex-wrap gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm">03</div>
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Canlı Göy Cismi Təsnifatı Aləti</h2>
+            <p class="text-xs sm:text-sm text-slate-400">6 Mərhələli NASA Protokolu üzrə dərhal qiymətləndirmə</p>
+          </div>
+        </div>
+
+        <!-- Presets -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span class="text-xs text-slate-400 mr-1">Hazır Nümunələr:</span>
+          <button data-preset="sun" class="px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-600/40 text-amber-300 text-xs hover:bg-amber-900/60 transition-colors">
+            Günəş
+          </button>
+          <button data-preset="jupiter" class="px-2.5 py-1 rounded-lg bg-sky-950/60 border border-sky-600/40 text-sky-300 text-xs hover:bg-sky-900/60 transition-colors">
+            Yupiter
+          </button>
+          <button data-preset="brown_dwarf" class="px-2.5 py-1 rounded-lg bg-purple-950/60 border border-purple-600/40 text-purple-300 text-xs hover:bg-purple-900/60 transition-colors">
+            Qəhvəyi Cırtdan (20 M<sub>J</sub>)
+          </button>
+          <button data-preset="unresolved_msini" class="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 text-xs hover:bg-slate-700 transition-colors">
+            Yalnız M sin i
+          </button>
+          <button data-preset="free_floating" class="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 text-xs hover:bg-slate-700 transition-colors">
+            Sərbəst Üzən
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Form Inputs (Left Column) -->
+        <div class="lg:col-span-5 p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <i data-lucide="sliders" class="w-4 h-4 text-sky-400"></i> Müşahidə Giriş Parametrləri
+          </h3>
+
+          <form id="classifier-form" class="space-y-4 text-xs">
+            <div>
+              <label class="block text-slate-300 font-semibold mb-1">Cismin Kütləsi (Yupiter kütləsi M<sub>J</sub> ilə):</label>
+              <input id="input-mass" type="number" step="0.1" value="1.0" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-sm focus:border-sky-500 focus:outline-none">
+              <span class="text-[11px] text-slate-400">1 M<sub>J</sub> &approx; 1.898&times;10²⁷ kq &bull; Günəş &approx; 1047.6 M<sub>J</sub></span>
+            </div>
+
+            <div>
+              <label class="block text-slate-300 font-semibold mb-1">Kütlənin Mənbəyi və Tipi:</label>
+              <select id="input-mass-type" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:border-sky-500 focus:outline-none">
+                <option value="true">Həqiqi kütlə (Tranzit + Radial sürət və ya müstəqil ölçmə)</option>
+                <option value="msini">Yalnız minimum kütlə (M sin i - meyllik bucağı bilinmir)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-slate-300 font-semibold mb-1">Cismin Radiusu (Yupiter radiusu R<sub>J</sub> ilə):</label>
+              <input id="input-radius" type="number" step="0.05" value="1.0" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-sm focus:border-sky-500 focus:outline-none">
+              <span class="text-[11px] text-slate-400">1 R<sub>J</sub> = 69 911 km &bull; Günəş &approx; 9.95 R<sub>J</sub></span>
+            </div>
+
+            <div>
+              <label class="block text-slate-300 font-semibold mb-1">Host Ulduzla Bağlılıq:</label>
+              <select id="input-host" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:border-sky-500 focus:outline-none">
+                <option value="bound">Ulduzla orbitdə bağlıdır (Planetary companion)</option>
+                <option value="host_itself">Cismin özü mərkəzi ulduzdur (Host star)</option>
+                <option value="free_floating">Sərbəst üzən cisimdir (Ulduzsuz, rogue)</option>
+                <option value="unknown">Naməlum / Bağlılıq sübut olunmayıb</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-slate-300 font-semibold mb-1">Daxili Enerji Mənbəyi (Nüvə Sintezi):</label>
+              <select id="input-fusion" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:border-sky-500 focus:outline-none">
+                <option value="no_fusion">Daxili sintez yoxdur (Yalnız əks olunan işıq / qalıq istilik)</option>
+                <option value="steady_h">Davamlı hidrogen sintezi (H &rarr; He ulduz nüvəsi)</option>
+                <option value="partial">Yalnız qısa dövrlü deyterium sintezi (Qəhvəyi cırtdan)</option>
+                <option value="unknown">Naməlum / Müşahidə edilməyib</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-slate-300 font-semibold mb-1">Spektral Analiz və İşıqlıq:</label>
+              <select id="input-spectrum" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:border-sky-500 focus:outline-none">
+                <option value="reflected">Əks olunmuş işıq spektri (Planet rejimi)</option>
+                <option value="star_like">Ulduz spektri (Teff və L kütləyə uyğundur)</option>
+                <option value="cold_faint">Soyuq, çox zəif infraqırmızı rejim</option>
+                <option value="none">Mövcud deyil / Arxivdə spektr yoxdur</option>
+              </select>
+            </div>
+
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-slate-950 font-bold text-xs shadow-lg shadow-sky-500/20 transition-all flex items-center justify-center gap-2">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>Protokolu Yenidən Yoxla</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Evaluation Results & 6-Stage Trace (Right Column) -->
+        <div class="lg:col-span-7 space-y-4">
+          <!-- Final Verdict Card -->
+          <div id="classifier-result"></div>
+
+          <!-- Step-by-step 6 stage breakdown -->
+          <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+              <i data-lucide="git-merge" class="w-4 h-4 text-purple-400"></i> Altı Mərhələli Sübut Zənciri
+            </h4>
+            <div id="classifier-steps" class="space-y-2"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 4: TƏSNİFAT SİSTEMİ VƏ ŞKALA (PAGE 4) -->
+    <section class="space-y-8 scroll-mt-24">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm">04</div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Təsnifat Sistemi və Qərar Şkalası</h2>
+          <p class="text-xs sm:text-sm text-slate-400">15 M<sub>J</sub>, 30 M<sub>J</sub> və 75 M<sub>J</sub> hədlərinin mənası</p>
+        </div>
+      </div>
+
+      <!-- Decision Bar Visual from Page 4 -->
+      <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-6">
+        <div class="text-xs text-slate-300">
+          Kütlə, Yupiter kütlələri ilə (M<sub>J</sub>) — loqarifmik baxış:
+        </div>
+
+        <!-- Visual Bar -->
+        <div class="relative pt-8 pb-4">
+          <!-- Threshold Pins -->
+          <div class="absolute top-0 left-[20%] -translate-x-1/2 text-center">
+            <span class="text-[10px] font-mono font-bold text-sky-300 bg-sky-950 px-2 py-0.5 rounded border border-sky-800">15 M<sub>J</sub></span>
+            <div class="text-[9px] text-slate-400 mt-0.5">Qəhvəyi cırtdan aşağı həddi [5]</div>
+          </div>
+
+          <div class="absolute top-0 left-[45%] -translate-x-1/2 text-center">
+            <span class="text-[10px] font-mono font-bold text-purple-300 bg-purple-950 px-2 py-0.5 rounded border border-purple-800">30 M<sub>J</sub></span>
+            <div class="text-[9px] text-slate-400 mt-0.5">NASA Arxiv daxil etmə həddi [4]</div>
+          </div>
+
+          <div class="absolute top-0 left-[75%] -translate-x-1/2 text-center">
+            <span class="text-[10px] font-mono font-bold text-amber-300 bg-amber-950 px-2 py-0.5 rounded border border-amber-800">75 M<sub>J</sub></span>
+            <div class="text-[9px] text-slate-400 mt-0.5">Qəhvəyi cırtdan yuxarı həddi [5]</div>
+          </div>
+
+          <!-- Color Segments -->
+          <div class="h-10 rounded-xl flex overflow-hidden border border-slate-700 font-bold text-xs shadow-inner">
+            <div class="w-[20%] bg-gradient-to-r from-sky-700 to-sky-500 text-slate-950 flex items-center justify-center tracking-wider">
+              PLANET
+            </div>
+            <div class="w-[55%] bg-gradient-to-r from-purple-800 via-indigo-900 to-purple-800 text-purple-200 flex items-center justify-center tracking-wider text-center px-2">
+              TƏSNİF EDİLMƏYİB (Qəhvəyi Cırtdan Sərhədi)
+            </div>
+            <div class="w-[25%] bg-gradient-to-r from-amber-600 to-amber-400 text-slate-950 flex items-center justify-center tracking-wider">
+              ULDUZ
+            </div>
+          </div>
+
+          <!-- Markers underneath -->
+          <div class="flex justify-between text-[11px] font-mono text-slate-400 mt-2">
+            <span>1 M<sub>J</sub> (Yupiter)</span>
+            <span>10 M<sub>J</sub></span>
+            <span>100 M<sub>J</sub></span>
+            <span>1047.6 M<sub>J</sub> (Günəş)</span>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 text-xs text-slate-400 leading-relaxed">
+          * Müvəqqəti qərar hədləri: 15 və 75 M<sub>J</sub> NASA StarChild-ın qəhvəyi cırtdanlar üçün verdiyi “təxminən 15–75 Yupiter kütləsi” aralığına əsaslanır [5]; bunlar yuvarlaqlaşdırılmış dəyərlərdir və istifadədən əvvəl kalibrlənməlidir. NASA Exoplanet Archive 30 M<sub>J</sub>-yə qədər cisimləri daxil edir [4].
+        </div>
+
+        <!-- Decision Table -->
+        <div class="overflow-x-auto rounded-xl border border-slate-800">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead class="bg-slate-900 text-slate-400 font-semibold border-b border-slate-800">
+              <tr>
+                <th class="p-3">Nəticə</th>
+                <th class="p-3">Bunların hamısı ödənməlidir</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/70 text-slate-300">
+              <tr class="bg-amber-950/20">
+                <td class="p-3 font-extrabold text-amber-400 tracking-wider">ULDUZ</td>
+                <td class="p-3">Kütlənin aşağı həddi (2&sigma;) &ge; 75 M<sub>J</sub> <strong>və</strong> spektr / işıqlıq davamlı hidrogen sintezinə uyğun <strong>və</strong> R, &rho; həmin kütləyə uyğun.</td>
+              </tr>
+              <tr class="bg-sky-950/20">
+                <td class="p-3 font-extrabold text-sky-400 tracking-wider">PLANET</td>
+                <td class="p-3">Həqiqi kütlə (yalnız M sin i deyil), yuxarı həddi (2&sigma;) &le; 15 M<sub>J</sub> <strong>və</strong> sintez sübutu yoxdur <strong>və</strong> hostla bağlıdır <strong>və</strong> yalnış müsbət ehtimalı aşağıdır [4].</td>
+              </tr>
+              <tr class="bg-purple-950/20">
+                <td class="p-3 font-extrabold text-purple-400 tracking-wider">TƏSNİF EDİLMƏYİB</td>
+                <td class="p-3">Qalan hər şey: lazımi giriş çatışmır, kütlə 15–75 M<sub>J</sub>-dir, yalnız minimum kütlə var və ya testlər bir-birinə ziddir.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: ÇOXMƏRHƏLƏLİ TƏSNİFAT SXEMİ (PAGE 5) -->
+    <section id="pipeline" class="space-y-8 scroll-mt-24">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm">05</div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Çoxmərhələli Təsnifat Sxemi</h2>
+          <p class="text-xs sm:text-sm text-slate-400">Məlumat toplanmasından yekun qərara qədər sabit protokol</p>
+        </div>
+      </div>
+
+      <!-- 6 Horizontal Steps Flow -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-center relative group hover:border-sky-500/50 transition-all">
+          <div class="text-[10px] font-bold text-sky-400 uppercase">Mərhələ 1</div>
+          <div class="text-sm font-bold text-white mt-1">Toplama</div>
+          <div class="text-[11px] text-slate-400 mt-2">Arxiv &bull; TESS &bull; ADS &bull; JPL</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-center relative group hover:border-sky-500/50 transition-all">
+          <div class="text-[10px] font-bold text-sky-400 uppercase">Mərhələ 2</div>
+          <div class="text-sm font-bold text-white mt-1">Hesablama</div>
+          <div class="text-[11px] text-slate-400 mt-2">a, P, R, &delta;, K</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-center relative group hover:border-sky-500/50 transition-all">
+          <div class="text-[10px] font-bold text-sky-400 uppercase">Mərhələ 3</div>
+          <div class="text-sm font-bold text-white mt-1">Spektral Analiz</div>
+          <div class="text-[11px] text-slate-400 mt-2">T<sub>eff</sub>, L, spektr tipi</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-center relative group hover:border-sky-500/50 transition-all">
+          <div class="text-[10px] font-bold text-sky-400 uppercase">Mərhələ 4</div>
+          <div class="text-sm font-bold text-white mt-1">Kütlə və Sıxlıq</div>
+          <div class="text-[11px] text-slate-400 mt-2">Kepler M &bull; &rho; uyğunluğu</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-center relative group hover:border-sky-500/50 transition-all">
+          <div class="text-[10px] font-bold text-sky-400 uppercase">Mərhələ 5</div>
+          <div class="text-sm font-bold text-white mt-1">Sintez Sübutu</div>
+          <div class="text-[11px] text-slate-400 mt-2">L və M &bull; H &rarr; He</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-center relative group hover:border-sky-500/50 transition-all">
+          <div class="text-[10px] font-bold text-purple-400 uppercase">Mərhələ 6</div>
+          <div class="text-sm font-bold text-white mt-1">Yekun Təsnif</div>
+          <div class="text-[11px] text-slate-400 mt-2">Qaydaların tətbiqi</div>
+        </div>
+      </div>
+
+      <!-- Pipeline Table from Page 5 -->
+      <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/60">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead class="bg-slate-900 text-slate-400 font-semibold border-b border-slate-800">
+            <tr>
+              <th class="p-3.5">Mərhələ</th>
+              <th class="p-3.5">Əməliyyat</th>
+              <th class="p-3.5">Qeyd olunan nəticə</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 text-slate-300">
+            <tr>
+              <td class="p-3.5 font-bold text-sky-400">1 Toplama</td>
+              <td class="p-3.5">NASA Exoplanet Archive, TESS işıq əyriləri, ADS, NASA/JPL sorğusu.</td>
+              <td class="p-3.5">Dəyər, vahid, qeyri-müəyyənlik, mənbə; çatışmayan “N/A” qalır.</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-sky-400">2 Hesablama</td>
+              <td class="p-3.5">Məlumatdan a, P, R<sub>p</sub>/R<sub>s</sub>, &delta;, K çıxarmaq.</td>
+              <td class="p-3.5">Orbit və ölçü parametrləri.</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-sky-400">3 Spektr</td>
+              <td class="p-3.5">T<sub>eff</sub>, spektr tipi, işıqlığı təyin etmək.</td>
+              <td class="p-3.5">Temperatur və L, ya da “mövcud deyil”.</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-sky-400">4 Kütlə və &rho;</td>
+              <td class="p-3.5">Kepler kütləsi; &rho; = 3M/4&pi;R³ uyğunluq yoxlaması kimi.</td>
+              <td class="p-3.5">2&sigma; hədli kütlə; həqiqi kütlə, yoxsa yalnız M sin i.</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-sky-400">5 Sintez</td>
+              <td class="p-3.5">L və T<sub>eff</sub>-in həmin kütləli hidrogen sintez edən cisimə uyğunluğunu yoxlamaq.</td>
+              <td class="p-3.5">Sintez sübutu: bəli / xeyr / bilinmir.</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-bold text-purple-400">6 Yekun</td>
+              <td class="p-3.5">Qayda cədvəlini tətbiq etmək (səhifə 4).</td>
+              <td class="p-3.5">ULDUZ, PLANET və ya TƏSNİF EDİLMƏYİB + çatışmayan sübutların siyahısı.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="p-3 bg-purple-950/40 border-t border-purple-500/30 text-xs text-purple-300 font-semibold text-center">
+          Qayda: İstənilən mərhələdə çatışmayan və ya ziddiyyətli məlumat &rarr; TƏSNİF EDİLMƏYİB (heç vaxt təxminlə doldurulmur).
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: REAL NASA İSTİNAD HALLARI VƏ SƏRHƏD CİSİMLƏRİ (PAGE 5) -->
+    <section id="cases" class="space-y-8 scroll-mt-24">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm">06</div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Real NASA İstinad Halları</h2>
+          <p class="text-xs sm:text-sm text-slate-400">Günəş və Yupiter üçün rəsmi istinad cədvəli və sərhəd cisimləri</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/60">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead class="bg-slate-900 text-slate-400 font-semibold border-b border-slate-800">
+            <tr>
+              <th class="p-3.5">Kəmiyyət</th>
+              <th class="p-3.5 text-amber-300">Günəş (İstinad Ulduz)</th>
+              <th class="p-3.5 text-sky-300">Yupiter (İstinad Planet)</th>
+              <th class="p-3.5">Vahid</th>
+              <th class="p-3.5">İst.</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 text-slate-300 font-mono text-xs">
+            <tr>
+              <td class="p-3.5 font-sans font-medium text-white">Kütlə</td>
+              <td class="p-3.5 text-amber-400">1.9884 &times; 10³⁰</td>
+              <td class="p-3.5 text-sky-400">1.89813 &times; 10²⁷</td>
+              <td class="p-3.5">kq</td>
+              <td class="p-3.5 font-sans">[1], [2]</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-sans font-medium text-white">Yupiter kütləsi ilə</td>
+              <td class="p-3.5 text-amber-400">1047.6</td>
+              <td class="p-3.5 text-sky-400">1 (tərifə görə)</td>
+              <td class="p-3.5">M<sub>J</sub></td>
+              <td class="p-3.5 font-sans">hesablanıb</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-sans font-medium text-white">Həcmcə orta radius</td>
+              <td class="p-3.5">695 700</td>
+              <td class="p-3.5">69 911</td>
+              <td class="p-3.5">km</td>
+              <td class="p-3.5 font-sans">[1], [2]</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-sans font-medium text-white">Orta sıxlıq</td>
+              <td class="p-3.5">1408</td>
+              <td class="p-3.5">1326</td>
+              <td class="p-3.5">kq/m³</td>
+              <td class="p-3.5 font-sans">[1], [2]</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-sans font-medium text-white">İşıqlıq / T<sub>eff</sub></td>
+              <td class="p-3.5">3.828 &times; 10²⁶ Vt / 5772 K</td>
+              <td class="p-3.5">sintez mənbəyi deyil [5]</td>
+              <td class="p-3.5">Vt / K</td>
+              <td class="p-3.5 font-sans">[1], [5]</td>
+            </tr>
+            <tr>
+              <td class="p-3.5 font-sans font-medium text-white">Orbit</td>
+              <td class="p-3.5">—</td>
+              <td class="p-3.5">a = 778.479&times;10⁶ km; P = 4332.589 gün</td>
+              <td class="p-3.5">km; gün</td>
+              <td class="p-3.5 font-sans">[2]</td>
+            </tr>
+            <tr class="bg-slate-950 font-sans font-semibold">
+              <td class="p-3.5 text-white">Yekun Nəticə</td>
+              <td class="p-3.5 text-amber-400">ULDUZ: kütlə &gg; 75 M<sub>J</sub>; işıqlıq sintez edən ulduza uyğun</td>
+              <td class="p-3.5 text-sky-400">PLANET: 1 M<sub>J</sub> &le; 15 M<sub>J</sub>; hostla bağlı; sintez yoxdur</td>
+              <td class="p-3.5">—</td>
+              <td class="p-3.5">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sərhəd Cisimləri İzahı (Page 5) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+          <h3 class="text-base font-bold text-purple-400 flex items-center gap-2">
+            <i data-lucide="help-circle" class="w-5 h-5"></i> Sərhəd Cisimləri Niyə Çətindir?
+          </h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            NASA qəhvəyi cırtdanları nəhəng planetlərdən böyük, kiçik ulduzlardan kiçik cisimlər kimi təsvir edir, təxminən <strong>15–75 Yupiter kütləsi</strong>, hidrogen sintezini davam etdirə bilmirlər [5].
+          </p>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Ona görə həm ulduz testindən (davamlı sintez yoxdur), həm də planet testindən (kütlə çox yüksəkdir) keçmirlər. Arxivin <strong>30 M<sub>J</sub></strong> daxil etmə həddi [4] bu aralıqla üst-üstə düşür, buna görə ad istifadə olunan qaydadan asılı olur. Sistem bu rejim üçün <strong class="text-purple-300">TƏSNİF EDİLMƏYİB</strong> cavabını verir.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+          <h3 class="text-base font-bold text-sky-400 flex items-center gap-2">
+            <i data-lucide="calculator" class="w-5 h-5"></i> Hipotetik Nümunə (20 M<sub>J</sub>)
+          </h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            M = 20 M<sub>J</sub> = 3.796&times;10²⁷ kq və R = 1 R<sub>J</sub> = 6.9911&times;10⁷ m götürək:
+          </p>
+          <div class="p-3 rounded-lg bg-slate-950 font-mono text-xs text-sky-300 text-center">
+            &rho; = 3M/4&pi;R³ = 2.65&times;10⁴ kq/m³
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Yupiterin sıxlığından iyirmi dəfə çox. Arxiv həddi [4] bu kütləni planet kimi qəbul edərdi, [5]-dəki aralıq isə onu qəhvəyi cırtdan sayır: <em>təkcə kütlə və sıxlıq sinfi açıq buraxır</em>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: ALTI ƏSAS SUALIN CAVABI (FAQ - PAGE 6) -->
+    <section id="faq" class="space-y-8 scroll-mt-24">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm">07</div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Altı Əsas Sualın Cavabı (FAQ)</h2>
+          <p class="text-xs sm:text-sm text-slate-400">Metodologiya haqqında ən çox verilən elmi suallar</p>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <!-- Question 1 -->
+        <div class="faq-item rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden transition-all">
+          <button class="faq-btn w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-800/40 transition-colors">
+            <span class="font-bold text-sm sm:text-base text-slate-200">1. Gaia niyə bəzi cisimləri dəqiq təsnif edə bilmir?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sky-400 shrink-0 transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content p-5 pt-0 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 bg-slate-950/40">
+            Sorğu müşahidələri (mövqe, hərəkət, parlaqlıq) təkbaşına həqiqi kütləni, radiusu, spektri və enerji mənbəyini müəyyən etmir (səhifə 1). Gaia ESA missiyasıdır, yalnız kontekst kimi istifadə olunur.
+          </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="faq-item rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden transition-all">
+          <button class="faq-btn w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-800/40 transition-colors">
+            <span class="font-bold text-sm sm:text-base text-slate-200">2. Ulduz və planet nə ilə fərqlənir?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sky-400 shrink-0 transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content p-5 pt-0 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 bg-slate-950/40">
+            Kütlə (bu metodda &ge; 75 qarşı &le; 15 M<sub>J</sub>), enerji mənbəyi (davamlı hidrogen sintezi qarşı sintezin olmaması [5]), işıqlıq və spektr. Ölçü və sıxlıq təkbaşına ayırmır: Günəş və Yupiterin sıxlığı cəmi &times;1.06 fərqlənir [1,2].
+          </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="faq-item rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden transition-all">
+          <button class="faq-btn w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-800/40 transition-colors">
+            <span class="font-bold text-sm sm:text-base text-slate-200">3. NASA məlumatlarından necə istifadə olunur?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sky-400 shrink-0 transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content p-5 pt-0 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 bg-slate-950/40">
+            Arxiv parametrləri və meyarları [4], TESS işıq əyriləri [6], JPL sabitləri [3], məlumat vərəqləri [1,2], ADS ədəbiyyatı [7] — sabit altı mərhələli ardıcıllıqla.
+          </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="faq-item rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden transition-all">
+          <button class="faq-btn w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-800/40 transition-colors">
+            <span class="font-bold text-sm sm:text-base text-slate-200">4. Düsturlar təsnifata necə kömək edir?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sky-400 shrink-0 transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content p-5 pt-0 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 bg-slate-950/40">
+            <strong>Kepler:</strong> ətrafında fırlanılan cismin kütləsi. <strong>&rho;:</strong> uyğunluq yoxlaması. <strong>&delta;:</strong> radius nisbəti. <strong>&Delta;&lambda;/&lambda;₀:</strong> hostun əks sürəti və yoldaş kütləsi. <strong>L, T<sub>eff</sub>:</strong> sintez yoxlaması.
+          </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="faq-item rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden transition-all">
+          <button class="faq-btn w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-800/40 transition-colors">
+            <span class="font-bold text-sm sm:text-base text-slate-200">5. Hansı hallarda qəti qərar mümkün deyil?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sky-400 shrink-0 transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content p-5 pt-0 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 bg-slate-950/40">
+            Yalnız minimum kütlə (M sin i); kütlə 15–75 M<sub>J</sub>; spektr və ya işıqlıq yoxdur; həll olunmamış yalnış müsbət; host yoxdur və ya sərbəst üzən cisim [4]; testlər ziddiyyətlidir.
+          </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="faq-item rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden transition-all">
+          <button class="faq-btn w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-800/40 transition-colors">
+            <span class="font-bold text-sm sm:text-base text-slate-200">6. Sistem NASA üçün nə dərəcədə faydalı ola bilər?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sky-400 shrink-0 transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content p-5 pt-0 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 bg-slate-950/40">
+            NASA arxivlərində üstünlük sıralaması aləti kimi: hər TƏSNİF EDİLMƏYİB nəticəsi çatışmayan sübutu, yəni hansı əlavə müşahidənin (radial sürət, spektr, meyllik) məsələni həll edəcəyini göstərir. Faydalılıq sınaqdan keçənə qədər sübut olunmayıb.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: YENİLİK, FAYDA VƏ MƏHDUDİYYƏTLƏR (PAGE 6) -->
+    <section class="space-y-8 scroll-mt-24">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm">08</div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Yenilik, Fayda və Məhdudiyyətlər</h2>
+          <p class="text-xs sm:text-sm text-slate-400">Elmi dəyər və gələcək inkişaf istiqaməti</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center">
+            <i data-lucide="lightbulb" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">Yenilik</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Ayrı-ayrı üsullar standartdır. Burada təklif olunan töhfə onların sübuta əsaslanan protokolda birləşdirilməsidir: açıq “TƏSNİF EDİLMƏYİB” nəticəsi və çatışmayan məlumatın heç vaxt təxminlə əvəzlənməməsi qaydası. Metodun yeni və ya ilk olduğu iddia edilmir.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <i data-lucide="trending-up" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">Potensial Fayda</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Gaia kimi sorğunun işarələdiyi, lakin təsnif edə bilmədiyi cisimlər NASA arxivlərində artıq olan məlumatla, çatışan sübuta görə sıralana bilər.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center">
+            <i data-lucide="compass" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">Məhdudiyyətlər &amp; Növbəti Addım</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            15 və 75 M<sub>J</sub> hədləri yuvarlaq və müvəqqətidir; dəqiqlik statistikası iddia olunmur. Növbəti addım: qaydaları yaxşı ölçülmüş NASA Exoplanet Archive qeydlərində kalibrləmək, sistemin hər sinfi nə qədər tez verdiyini hesabatlandırmaq.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 9: İSTİNADLAR (PAGE 6) -->
+    <section id="references" class="space-y-6 scroll-mt-24">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm">09</div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Rəsmi NASA İstinadları</h2>
+          <p class="text-xs text-slate-400">Bütün mənbələr NASA-ya aiddir (14 noyabr 2026-da yoxlanılıb)</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+        <a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html" target="_blank" class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 transition-all flex items-start gap-3 group">
+          <span class="font-bold text-sky-400 font-mono">[1]</span>
+          <div>
+            <div class="font-bold text-white group-hover:text-sky-300 transition-colors">NASA NSSDC, Sun Fact Sheet</div>
+            <div class="text-[11px] text-slate-400 mt-0.5 truncate">nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html</div>
+          </div>
+        </a>
+
+        <a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html" target="_blank" class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 transition-all flex items-start gap-3 group">
+          <span class="font-bold text-sky-400 font-mono">[2]</span>
+          <div>
+            <div class="font-bold text-white group-hover:text-sky-300 transition-colors">NASA NSSDC, Jupiter Fact Sheet</div>
+            <div class="text-[11px] text-slate-400 mt-0.5 truncate">nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html</div>
+          </div>
+        </a>
+
+        <a href="https://ssd.jpl.nasa.gov/planets/phys_par.html" target="_blank" class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 transition-all flex items-start gap-3 group">
+          <span class="font-bold text-sky-400 font-mono">[3]</span>
+          <div>
+            <div class="font-bold text-white group-hover:text-sky-300 transition-colors">NASA/JPL Solar System Dynamics</div>
+            <div class="text-[11px] text-slate-400 mt-0.5 truncate">ssd.jpl.nasa.gov/planets/phys_par.html (G = 6.67430&times;10⁻¹¹)</div>
+          </div>
+        </a>
+
+        <a href="https://exoplanetarchive.ipac.caltech.edu/docs/exoplanet_criteria.html" target="_blank" class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 transition-all flex items-start gap-3 group">
+          <span class="font-bold text-sky-400 font-mono">[4]</span>
+          <div>
+            <div class="font-bold text-white group-hover:text-sky-300 transition-colors">NASA Exoplanet Archive, Inclusion Criteria</div>
+            <div class="text-[11px] text-slate-400 mt-0.5 truncate">exoplanetarchive.ipac.caltech.edu (30 M<sub>J</sub> daxil etmə həddi)</div>
+          </div>
+        </a>
+
+        <a href="https://starchild.gsfc.nasa.gov/docs/StarChild/questions/question62.html" target="_blank" class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 transition-all flex items-start gap-3 group">
+          <span class="font-bold text-sky-400 font-mono">[5]</span>
+          <div>
+            <div class="font-bold text-white group-hover:text-sky-300 transition-colors">NASA StarChild, What is a brown dwarf?</div>
+            <div class="text-[11px] text-slate-400 mt-0.5 truncate">starchild.gsfc.nasa.gov (15–75 M<sub>J</sub> aralığı)</div>
+          </div>
+        </a>
+
+        <a href="https://heasarc.gsfc.nasa.gov/docs/tess/HowToFindAnExoplanet-UserVersion.html" target="_blank" class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 transition-all flex items-start gap-3 group">
+          <span class="font-bold text-sky-400 font-mono">[6]</span>
+          <div>
+            <div class="font-bold text-white group-hover:text-sky-300 transition-colors">NASA HEASARC, TESS: How to find an exoplanet</div>
+            <div class="text-[11px] text-slate-400 mt-0.5 truncate">heasarc.gsfc.nasa.gov/docs/tess</div>
+          </div>
+        </a>
+
+        <a href="https://ui.adsabs.harvard.edu" target="_blank" class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 transition-all flex items-start gap-3 group md:col-span-2">
+          <span class="font-bold text-sky-400 font-mono">[7]</span>
+          <div>
+            <div class="font-bold text-white group-hover:text-sky-300 transition-colors">NASA Astrophysics Data System (ADS)</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">ui.adsabs.harvard.edu (Ədəbiyyat axtarışı girişi)</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-20 border-t border-slate-800 bg-[#04060d] text-slate-500 text-xs py-10 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <span class="font-bold text-slate-300">STAR OR PLANET?</span> &bull; Təsnif edilməmiş göy cisimlərini müəyyənləşdirmək üçün elmi metod
+      </div>
+      <div>
+        Məlumat bazası: Yalnız rəsmi NASA mənbələri [1]–[7] &bull; 2026
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>
